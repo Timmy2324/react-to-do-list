@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import {ToDoList} from "./ToDoList";
 
@@ -8,56 +8,70 @@ export type TaskType = {
     isDone: boolean,
 }
 
+export type FilterValuesType = 'all' | 'active' | 'completed';
+
 function App() {
 
-    const toDoListTitle_1: string = 'What to learn';
-    const toDoListTitle_2: string = 'What to buy';
+    const toDoListTitle: string = 'What to learn';
 
-    const tasks_1: Array<TaskType> = [
+    const [filter, setFilter] = useState<FilterValuesType>('all');
+    const [tasks, setTasks] = useState<Array<TaskType>>([
         {
             id: 1,
-            title: 'HTML',
+            title: 'HTML&CSS',
             isDone: true,
         },
         {
             id: 2,
-            title: 'CSS',
+            title: 'JS',
             isDone: true,
         },
         {
             id: 3,
-            title: 'JS/TS',
-            isDone: true,
+            title: 'ReactJS',
+            isDone: false,
         },
-    ];
-
-    const tasks_2: Array<TaskType> = [
         {
             id: 4,
-            title: 'CHAMPAGNE',
-            isDone: true,
+            title: 'Rest API',
+            isDone: false,
         },
         {
             id: 5,
-            title: 'BEER',
-            isDone: true,
+            title: 'GraphQL',
+            isDone: false,
         },
-        {
-            id: 6,
-            title: 'FISH',
-            isDone: true,
-        },
-    ];
+    ]);
+
+    let taskForToDoList = tasks;
+
+    function changeFilter(filter: FilterValuesType) {
+        setFilter(filter);
+    }
+
+    function removeTask(id: number) {
+        setTasks(tasks.filter(t => t.id !== id));
+    }
+
+    function getTaskForRender() {
+        switch (filter) {
+            case 'completed':
+                return taskForToDoList = tasks.filter(t => t.isDone);
+            case 'active':
+                return taskForToDoList = tasks.filter(t => !t.isDone);
+            default:
+                return tasks;
+        }
+    }
 
     return (
         <div className="App">
             <ToDoList
-                title={toDoListTitle_1}
-                tasks={tasks_1}
-            />
-            <ToDoList
-                title={toDoListTitle_2}
-                tasks={tasks_2}
+                title={toDoListTitle}
+                tasks={getTaskForRender()}
+                filter={filter}
+                removeTask={removeTask}
+                changeFilter={changeFilter}
             />
         </div>
     );
