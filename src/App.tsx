@@ -4,9 +4,9 @@ import {ToDoList} from "./ToDoList";
 import {v1} from "uuid";
 
 export type TaskType = {
-    id: string,
-    title: string,
-    isDone: boolean,
+    id: string
+    title: string
+    isDone: boolean
 }
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
@@ -44,8 +44,6 @@ function App() {
         },
     ]);
 
-    let taskForToDoList = tasks;
-
     function addTask(title: string) {
         const newTask: TaskType = {
             id: v1(),
@@ -53,6 +51,10 @@ function App() {
             isDone: false
         }
         setTasks([newTask, ...tasks])
+    }
+
+    function changeTaskStatus(id: string, isDone: boolean) {
+        setTasks(tasks.map(t => t.id === id ? {...t, isDone} : t));
     }
 
     function changeFilter(filter: FilterValuesType) {
@@ -66,9 +68,9 @@ function App() {
     function getTaskForRender() {
         switch (filter) {
             case 'completed':
-                return taskForToDoList = tasks.filter(t => t.isDone);
+                return tasks.filter(t => t.isDone);
             case 'active':
-                return taskForToDoList = tasks.filter(t => !t.isDone);
+                return tasks.filter(t => !t.isDone);
             default:
                 return tasks;
         }
@@ -83,7 +85,7 @@ function App() {
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
-
+                changeTaskStatus={changeTaskStatus}
             />
         </div>
     );
