@@ -3,6 +3,8 @@ import './App.css';
 import {ToDoList} from "./ToDoList";
 import {v1} from "uuid";
 import {InputWithButton} from "./components/Input/InputWithButton";
+import 'antd/dist/antd.css';
+import {Col, Row} from "antd";
 
 export type TaskType = {
     id: string
@@ -21,8 +23,8 @@ export type FilterValuesType = 'all' | 'active' | 'completed';
 
 function App() {
 
-    const toDoListID1=v1();
-    const toDoListID2=v1();
+    const toDoListID1 = v1();
+    const toDoListID2 = v1();
 
     const [toDoLists, setToDoLists] = useState<Array<ToDoListsType>>([
         {id: toDoListID1, title: 'What to learn', filter: 'all'},
@@ -30,14 +32,14 @@ function App() {
     ])
 
     const [tasks, setTasks] = useState({
-        [toDoListID1]:[
+        [toDoListID1]: [
             {id: v1(), title: "HTML&CSS", isDone: true},
             {id: v1(), title: "JS", isDone: true},
             {id: v1(), title: "ReactJS", isDone: false},
             {id: v1(), title: "Rest API", isDone: false},
             {id: v1(), title: "GraphQL", isDone: false},
         ],
-        [toDoListID2]:[
+        [toDoListID2]: [
             {id: v1(), title: "HTML&CSS2", isDone: true},
             {id: v1(), title: "JS2", isDone: true},
             {id: v1(), title: "ReactJS2", isDone: false},
@@ -47,7 +49,7 @@ function App() {
     });
 
     const addTask = (toDoListID: string, title: string) => {
-        setTasks({...tasks, [toDoListID]: [{id: v1(), title, isDone: false},...tasks[toDoListID]]});
+        setTasks({...tasks, [toDoListID]: [{id: v1(), title, isDone: false}, ...tasks[toDoListID]]});
     }
 
     const changeTaskStatus = (toDoListID: string, id: string, isDone: boolean) => {
@@ -67,11 +69,11 @@ function App() {
         delete tasks[toDoListID];
     }
 
-    const updateTaskTitle = (toDoListID: string, taskID: string, title:string) => {
+    const updateTaskTitle = (toDoListID: string, taskID: string, title: string) => {
         setTasks({...tasks, [toDoListID]: tasks[toDoListID].map(task => task.id === taskID ? {...task, title} : task)});
     }
 
-    const updateToDoListTitle = (toDoListID: string, title:string) => {
+    const updateToDoListTitle = (toDoListID: string, title: string) => {
         setToDoLists(toDoLists.map(list => list.id === toDoListID ? {...list, title} : list))
     }
 
@@ -88,36 +90,46 @@ function App() {
 
     return (
         <div className="App">
-            <InputWithButton buttonName={'+'} callBack={addToDoList}/>
-            {toDoLists.map(list => {
-                let tasksForTodolist = tasks[list.id];
+            <Row>
+                <Col span={24}>
+                    <InputWithButton buttonName={'+'} callBack={addToDoList}/>
+                </Col>
+            </Row>
 
-                if (list.filter === "active") {
-                    tasksForTodolist = tasks[list.id].filter(t => !t.isDone);
-                }
-                if (list.filter === "completed") {
-                    tasksForTodolist = tasks[list.id].filter(t => t.isDone);
-                }
+            <Row>
+
+                {toDoLists.map(list => {
+                    let tasksForTodolist = tasks[list.id];
+
+                    if (list.filter === "active") {
+                        tasksForTodolist = tasks[list.id].filter(t => !t.isDone);
+                    }
+                    if (list.filter === "completed") {
+                        tasksForTodolist = tasks[list.id].filter(t => t.isDone);
+                    }
 
 
-                return (
-                    <ToDoList
-                        key={list.id}
-                        toDoListID={list.id}
-                        title={list.title}
-                        tasks={tasksForTodolist}
-                        filter={list.filter}
-                        removeTask={removeTask}
-                        changeFilter={changeFilter}
-                        addTask={addTask}
-                        changeTaskStatus={changeTaskStatus}
-                        removeToDoList={removeToDoList}
-                        updateTaskTitle={updateTaskTitle}
-                        updateToDoListTitle={updateToDoListTitle}
-                    />
-                )
-            })}
+                    return (
+                        <Col span={4}>
+                            <ToDoList
+                                key={list.id}
+                                toDoListID={list.id}
+                                title={list.title}
+                                tasks={tasksForTodolist}
+                                filter={list.filter}
+                                removeTask={removeTask}
+                                changeFilter={changeFilter}
+                                addTask={addTask}
+                                changeTaskStatus={changeTaskStatus}
+                                removeToDoList={removeToDoList}
+                                updateTaskTitle={updateTaskTitle}
+                                updateToDoListTitle={updateToDoListTitle}
+                            />
+                        </Col>
+                    )
+                })}
 
+            </Row>
         </div>
     );
 }

@@ -1,9 +1,12 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button} from "../Button/Button";
+import {Button, Input} from 'antd';
+import {PlusSquareOutlined} from "@ant-design/icons";
+
 
 type InputPropsType = {
-    callBack: (title:string) => void
-    buttonName: string
+    callBack: (title: string) => void
+    buttonName: string,
+    placeholder?: string
 }
 
 export const InputWithButton = (props: InputPropsType) => {
@@ -35,13 +38,11 @@ export const InputWithButton = (props: InputPropsType) => {
 
     return (
         <div>
-            <input
-                className={error ? 'error' : ''}
-                value={title}
-                onChange={onChangeSetTitle}
-                onKeyPress={onKeyPressAddTask}
-            />
-            <Button name={props.buttonName} callBack={addItem}/>
+            <Input.Group compact>
+                <Input onChange={onChangeSetTitle} style={{ width: 'calc(100% - 32px)' }}
+                       onKeyPress={onKeyPressAddTask} value={title} placeholder={props.placeholder}/>
+                <Button type="primary" icon={<PlusSquareOutlined/>} onClick={addItem}/>
+            </Input.Group>
             {errorMessage}
         </div>
     )

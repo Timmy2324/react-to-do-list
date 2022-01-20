@@ -1,8 +1,10 @@
-import React, {ChangeEvent} from "react";
+import React from "react";
 import {FilterValuesType, TaskType} from "./App";
-import {Button} from "./components/Button/Button";
 import {EditableSpan} from "./components/EditableSpan/EditableSpan";
 import {InputWithButton} from "./components/Input/InputWithButton";
+import {Button, Card, Checkbox, Radio} from "antd";
+import {DeleteOutlined} from "@ant-design/icons";
+import {CheckboxChangeEvent} from "antd/es/checkbox";
 
 type ToDoListPropsTypes = {
     toDoListID: string
@@ -22,7 +24,7 @@ export function ToDoList(props: ToDoListPropsTypes) {
 
     const removeTask = (taskID: string) => props.removeTask(props.toDoListID, taskID);
     const updateTask = (taskID: string, title: string) => props.updateTaskTitle(props.toDoListID, taskID, title)
-    const changeStatus = (taskID: string, e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(props.toDoListID, taskID, e.currentTarget.checked);
+    const changeStatus = (taskID: string, e: CheckboxChangeEvent) => props.changeTaskStatus(props.toDoListID, taskID, e.target.checked);
 
     const getSpanClass = (isDone: boolean) => {
         return isDone ? 'is-done' : '';
@@ -31,14 +33,15 @@ export function ToDoList(props: ToDoListPropsTypes) {
     const taskList = props.tasks.map((t: TaskType) => {
         return (
             <li key={t.id}>
-                <input
+                <Checkbox
                     type="checkbox"
                     checked={t.isDone}
                     onChange={(e) => changeStatus(t.id, e)}
                 />
                 <EditableSpan callBack={(title) => updateTask(t.id, title)} className={getSpanClass(t.isDone)}
                               title={t.title}/>
-                <Button name={'X'} callBack={() => removeTask(t.id)}/>
+                <Button type="primary" shape="circle" icon={<DeleteOutlined/>} size={'small'}
+                        onClick={() => removeTask(t.id)}/>
             </li>
         )
     })
@@ -51,10 +54,6 @@ export function ToDoList(props: ToDoListPropsTypes) {
     const onClickFilterActiveTasks = () => props.changeFilter(props.toDoListID, 'active');
     const onClickFilterCompletedTasks = () => props.changeFilter(props.toDoListID, 'completed');
 
-    const getBtnClass = (filter: FilterValuesType) => {
-        return props.filter === filter ? 'active-filter' : '';
-    }
-
     const onClickRemoveToDoList = () => {
         props.removeToDoList(props.toDoListID)
     }
@@ -64,20 +63,28 @@ export function ToDoList(props: ToDoListPropsTypes) {
     }
 
     return (
-        <div>
+        <Card title={
             <h3>
                 <EditableSpan title={props.title} callBack={updateToDoListTitle}/>
-                <Button name={'X'} callBack={onClickRemoveToDoList}/>
+                <Button type="primary" shape="circle" icon={<DeleteOutlined/>} size={'small'}
+                        onClick={onClickRemoveToDoList}/>
             </h3>
-            <InputWithButton buttonName={'+'} callBack={addTask}/>
+        } style={{width: 300}} bordered={false}>
+
+            <InputWithButton placeholder={'Введите текст задачи'} buttonName={'+'} callBack={addTask}/>
             <ul>
                 {taskList}
             </ul>
             <div>
-                <Button className={getBtnClass('all')} name={'All'} callBack={onClickFilterAllTasks}/>
-                <Button className={getBtnClass('active')} name={'Active'} callBack={onClickFilterActiveTasks}/>
-                <Button className={getBtnClass('completed')} name={'Completed'} callBack={onClickFilterCompletedTasks}/>
+                <Radio.Group defaultValue="All" buttonStyle="solid">
+                    <Radio.Button value="All"
+                                  onClick={onClickFilterAllTasks}>All</Radio.Button>
+                    <Radio.Button value="Active"
+                                  onClick={onClickFilterActiveTasks}>Active</Radio.Button>
+                    <Radio.Button value="Completed"
+                                  onClick={onClickFilterCompletedTasks}>Completed</Radio.Button>
+                </Radio.Group>
             </div>
-        </div>
+        </Card>
     )
 }

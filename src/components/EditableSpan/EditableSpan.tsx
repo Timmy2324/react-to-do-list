@@ -1,4 +1,5 @@
 import React, {useState, ChangeEvent} from "react";
+import {Input} from "antd";
 
 type EditableSpanPropsType = {
     title: string
@@ -25,6 +26,6 @@ export const EditableSpan = (props: EditableSpanPropsType) => {
     }
 
     return isEdit
-        ? <input value={title} autoFocus onBlur={onBlurHandler} onChange={onChangeTitleHandler}/>
-        : <span onDoubleClick={onDoubleClickHandler} className={props.className}>{title}</span>
+        ? <Input style={{ width: 'calc(100% - 46px)' }} value={title} autoFocus onBlur={onBlurHandler} onChange={onChangeTitleHandler}/>
+        : <span style={{display: 'inline-block', padding: '4px 11px' }} onDoubleClick={onDoubleClickHandler} className={props.className}>{title}</span>
 }
