@@ -1,8 +1,9 @@
 import React, {ChangeEvent} from "react";
 import {FilterValuesType, TaskType} from "./App";
-import {Button} from "./components/Button/Button";
 import {EditableSpan} from "./components/EditableSpan/EditableSpan";
 import {InputWithButton} from "./components/Input/InputWithButton";
+import {DeleteOutline} from "@mui/icons-material";
+import {Button, ButtonGroup, Checkbox, IconButton} from "@mui/material";
 
 type ToDoListPropsTypes = {
     toDoListID: string
@@ -30,16 +31,15 @@ export function ToDoList(props: ToDoListPropsTypes) {
 
     const taskList = props.tasks.map((t: TaskType) => {
         return (
-            <li key={t.id}>
-                <input
-                    type="checkbox"
+            <div key={t.id}>
+                <Checkbox
                     checked={t.isDone}
                     onChange={(e) => changeStatus(t.id, e)}
                 />
                 <EditableSpan callBack={(title) => updateTask(t.id, title)} className={getSpanClass(t.isDone)}
                               title={t.title}/>
-                <Button name={'X'} callBack={() => removeTask(t.id)}/>
-            </li>
+                <IconButton onClick={() => removeTask(t.id)}><DeleteOutline /></IconButton>
+            </div>
         )
     })
 
@@ -50,10 +50,6 @@ export function ToDoList(props: ToDoListPropsTypes) {
     const onClickFilterAllTasks = () => props.changeFilter(props.toDoListID, 'all');
     const onClickFilterActiveTasks = () => props.changeFilter(props.toDoListID, 'active');
     const onClickFilterCompletedTasks = () => props.changeFilter(props.toDoListID, 'completed');
-
-    const getBtnClass = (filter: FilterValuesType) => {
-        return props.filter === filter ? 'active-filter' : '';
-    }
 
     const onClickRemoveToDoList = () => {
         props.removeToDoList(props.toDoListID)
@@ -67,17 +63,35 @@ export function ToDoList(props: ToDoListPropsTypes) {
         <div>
             <h3>
                 <EditableSpan title={props.title} callBack={updateToDoListTitle}/>
-                <Button name={'X'} callBack={onClickRemoveToDoList}/>
+                <IconButton onClick={onClickRemoveToDoList}><DeleteOutline /></IconButton>
             </h3>
-            <InputWithButton buttonName={'+'} callBack={addTask}/>
-            <ul>
-                {taskList}
-            </ul>
+            <InputWithButton callBack={addTask}/>
             <div>
-                <Button className={getBtnClass('all')} name={'All'} callBack={onClickFilterAllTasks}/>
-                <Button className={getBtnClass('active')} name={'Active'} callBack={onClickFilterActiveTasks}/>
-                <Button className={getBtnClass('completed')} name={'Completed'} callBack={onClickFilterCompletedTasks}/>
+                {taskList}
             </div>
+            <ButtonGroup>
+                <Button
+                    color={'secondary'}
+                    variant={props.filter === 'all' ? 'contained' : 'outlined'}
+                    onClick={onClickFilterAllTasks}
+                >
+                    All
+                </Button>
+                <Button
+                    color={'primary'}
+                    variant={props.filter === 'active' ? 'contained' : 'outlined'}
+                    onClick={onClickFilterActiveTasks}
+                >
+                    Active
+                </Button>
+                <Button
+                    color={'success'}
+                    variant={props.filter === 'completed' ? 'contained' : 'outlined'}
+                    onClick={onClickFilterCompletedTasks}
+                >
+                    Completed
+                </Button>
+            </ButtonGroup>
         </div>
     )
 }

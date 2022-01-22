@@ -1,9 +1,9 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button} from "../Button/Button";
+import {IconButton, TextField} from "@mui/material";
+import {Add} from "@mui/icons-material";
 
 type InputPropsType = {
     callBack: (title:string) => void
-    buttonName: string
 }
 
 export const InputWithButton = (props: InputPropsType) => {
@@ -35,14 +35,16 @@ export const InputWithButton = (props: InputPropsType) => {
 
     return (
         <div>
-            <input
-                className={error ? 'error' : ''}
+            <TextField
+                variant="standard"
+                color={'info'}
+                error={error}
                 value={title}
                 onChange={onChangeSetTitle}
                 onKeyPress={onKeyPressAddTask}
+                helperText={error ? errorMessage : ' '}
             />
-            <Button name={props.buttonName} callBack={addItem}/>
-            {errorMessage}
+            <IconButton size={'small'} color={'info'} onClick={addItem}><Add/></IconButton>
         </div>
     )
 }
