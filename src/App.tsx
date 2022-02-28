@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
-import {ToDoList} from "./ToDoList";
+import {ToDoList} from "./components/ToDoList/ToDoList";
 import {InputWithButton} from "./components/Input/InputWithButton";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from '@mui/icons-material';
@@ -37,21 +37,21 @@ function App() {
     const toDoLists = useSelector<AppRootStateType, Array<ToDoListsType>>(state => state.toDoLists);
 
 
-    const changeFilter = (toDoListID: string, filter: FilterValuesType) => {
+    const changeFilter = useCallback((toDoListID: string, filter: FilterValuesType) => {
         dispatch(changeTodolistFilterAC(toDoListID, filter));
-    }
+    }, [dispatch]);
 
-    const removeToDoList = (toDoListID: string) => {
+    const removeToDoList = useCallback((toDoListID: string) => {
         dispatch(removeTodolistAC(toDoListID));
-    }
+    }, [dispatch]);
 
-    const updateToDoListTitle = (toDoListID: string, title: string) => {
+    const updateToDoListTitle = useCallback((toDoListID: string, title: string) => {
         dispatch(changeTodolistTitleAC(toDoListID, title));
-    }
+    }, [dispatch]);
 
-    const addToDoList = (title: string) => {
+    const addToDoList = useCallback((title: string) => {
         dispatch(addTodolistAC(title));
-    }
+    }, [dispatch]);
 
 
     return (
@@ -79,8 +79,6 @@ function App() {
                 </Grid>
                 <Grid container spacing={3}>
                     {toDoLists.map(list => {
-
-
 
                         return (
                             <Grid key={list.id} item>
