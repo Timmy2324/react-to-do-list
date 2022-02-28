@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
 import {IconButton, TextField} from "@mui/material";
 import {Add} from "@mui/icons-material";
 
@@ -6,7 +6,7 @@ type InputPropsType = {
     callBack: (title:string) => void
 }
 
-export const InputWithButton = (props: InputPropsType) => {
+export const InputWithButton = memo((props: InputPropsType) => {
 
     const [title, setTitle] = useState('');
     const [error, setError] = useState<boolean>(false);
@@ -47,4 +47,4 @@ export const InputWithButton = (props: InputPropsType) => {
             <IconButton size={'small'} color={'info'} onClick={addItem}><Add/></IconButton>
         </div>
     )
-}
+});
