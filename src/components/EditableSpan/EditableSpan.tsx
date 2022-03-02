@@ -1,7 +1,7 @@
 import React, {useState, ChangeEvent, memo} from "react";
 import {TextField} from "@mui/material";
 
-type EditableSpanPropsType = {
+export type EditableSpanPropsType = {
     title: string
     callBack: (title: string) => void
     className?: string

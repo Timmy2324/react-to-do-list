@@ -2,7 +2,7 @@ import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
 import {IconButton, TextField} from "@mui/material";
 import {Add} from "@mui/icons-material";
 
-type InputPropsType = {
+export type InputPropsType = {
     callBack: (title:string) => void
 }
 
