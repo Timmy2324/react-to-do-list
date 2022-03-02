@@ -3,7 +3,7 @@ import {Checkbox, IconButton} from "@mui/material";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
 import {DeleteOutline} from "@mui/icons-material";
 
-type TaskPropsType = {
+export type TaskPropsType = {
     taskId: string,
     title: string,
     isDone: boolean,
