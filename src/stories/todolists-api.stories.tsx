@@ -166,28 +166,30 @@ export const DeleteTask = () => {
 
 export const UpdateTask = () => {
     const [state, setState] = useState<any>(null);
-    const [toDoListID, setToDoListID] = useState('');
-    const [taskID, setTaskID] = useState('');
-    const [title, setTitle] = useState('');
-    const [deadline, setDeadline] = useState('');
-    const [description, setDescription] = useState('');
-    const [priority, setPriority] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [status, setStatus] = useState('');
+    const [toDoListID, setToDoListID] = useState<string>();
+    const [taskID, setTaskID] = useState<string>();
+    const [title, setTitle] = useState<string>();
+    const [deadline, setDeadline] = useState<string>();
+    const [description, setDescription] = useState<string>();
+    const [priority, setPriority] = useState<number>();
+    const [startDate, setStartDate] = useState<string>();
+    const [status, setStatus] = useState<number>();
 
     const onClickHandler = () => {
-        const update:UpdateTaskType = {
-            title: 'title',
-            deadline: String(new Date().getDate()),
-            description: 'description',
-            priority: 3,
-            startDate: String(new Date().getDate()),
-            status: 3,
-        };
-        todolistsApi.updateTask(toDoListID, taskID, update)
-            .then(({data}) => {
-                setState(data.data);
-            });
+        if (toDoListID && taskID && title && deadline && description && priority && startDate && status) {
+            const update:UpdateTaskType = {
+                title,
+                deadline,
+                description,
+                priority,
+                startDate,
+                status,
+            };
+            todolistsApi.updateTask(toDoListID, taskID, update)
+                .then(({data}) => {
+                    setState(data.data);
+                });
+        }
     };
 
     return (
@@ -210,13 +212,13 @@ export const UpdateTask = () => {
                     <input placeholder={'Введите description'} type="text" value={description} onChange={(e) => setDescription(e.currentTarget.value)}/>
                 </div>
                 <div>
-                    <input placeholder={'Введите priority'} type="text" value={priority} onChange={(e) => setPriority(e.currentTarget.value)}/>
+                    <input placeholder={'Введите priority'} type="text" value={priority} onChange={(e) => setPriority(Number(e.currentTarget.value))}/>
                 </div>
                 <div>
                     <input placeholder={'Введите startDate'} type="text" value={startDate} onChange={(e) => setStartDate(e.currentTarget.value)}/>
                 </div>
                 <div>
-                    <input placeholder={'Введите status'} type="text" value={status} onChange={(e) => setStatus(e.currentTarget.value)}/>
+                    <input placeholder={'Введите status'} type="text" value={status} onChange={(e) => setStatus(Number(e.currentTarget.value))}/>
                 </div>
                 <button onClick={onClickHandler}>UpdateTask</button>
             </div>
