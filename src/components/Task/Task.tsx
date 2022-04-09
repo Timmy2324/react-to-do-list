@@ -2,11 +2,12 @@ import React, {ChangeEvent, memo} from 'react';
 import {Checkbox, IconButton} from "@mui/material";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
 import {DeleteOutline} from "@mui/icons-material";
+import {TaskStatuses} from "../../api/todolists-api";
 
 export type TaskPropsType = {
     taskId: string,
     title: string,
-    isDone: boolean,
+    status: TaskStatuses,
     changeStatus: (taskId: string, e: ChangeEvent<HTMLInputElement>) => void,
     updateTask: (taskId: string, title: string) => void,
     removeTask: (taskId: string) => void,
@@ -14,18 +15,18 @@ export type TaskPropsType = {
 
 export const Task = memo((props: TaskPropsType) => {
 
-
-    const getSpanClass = (isDone: boolean) => {
-        return isDone ? 'is-done' : '';
-    }
+    //
+    // const getSpanClass = (isDone: boolean) => {
+    //     return isDone ? 'is-done' : '';
+    // }
 
     return (
         <div key={props.taskId}>
             <Checkbox
-                checked={props.isDone}
+                checked={props.status === TaskStatuses.Completed}
                 onChange={(e) => props.changeStatus(props.taskId, e)}
             />
-            <EditableSpan callBack={(title) => props.updateTask(props.taskId, title)} className={getSpanClass(props.isDone)}
+            <EditableSpan callBack={(title) => props.updateTask(props.taskId, title)}
                           title={props.title}/>
             <IconButton onClick={() => props.removeTask(props.taskId)}><DeleteOutline /></IconButton>
         </div>
