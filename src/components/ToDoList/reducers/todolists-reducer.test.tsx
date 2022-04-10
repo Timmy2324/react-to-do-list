@@ -1,13 +1,12 @@
 import React from 'react';
 import {
     addTodolistAC, changeTodolistFilterAC, changeTodolistTitleAC, FilterValuesType,
-    removeTodolistAC, setToDOListsAC, ToDoListDomainType,
+    removeTodolistAC, setToDOListsAC, TasksStateType, ToDoListDomainType,
     todolistsReducer
 } from './todolists-reducer';
 import {v1} from 'uuid';
-import {TasksStateType} from '../App';
 import {tasksReducer} from "./tasks-reducer";
-import {TaskPriorities, TaskStatuses, ToDoListType} from "../api/todolists-api";
+import {TaskPriorities, TaskStatuses, ToDoListType} from "../../../api/todolists-api";
 
 let todolistId1: string;
 let todolistId2: string;

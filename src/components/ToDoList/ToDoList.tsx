@@ -4,13 +4,13 @@ import {InputWithButton} from "../Input/InputWithButton";
 import {DeleteOutline} from "@mui/icons-material";
 import {Button, ButtonGroup, IconButton} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../state/store";
+import {AppRootStateType} from "../../app/store";
 import {
     createTask, deleteTask,
     fetchTasks, updateTask,
-} from "../../state/tasks-reducer";
-import {Task} from "../Task/Task";
-import {FilterValuesType} from "../../state/todolists-reducer";
+} from "./reducers/tasks-reducer";
+import {Task} from "./Task/Task";
+import {FilterValuesType} from "./reducers/todolists-reducer";
 import {TaskStatuses, TaskType} from "../../api/todolists-api";
 
 type ToDoListPropsTypes = {
