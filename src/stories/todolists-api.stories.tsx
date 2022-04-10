@@ -32,7 +32,6 @@ export const CreateToDoLists = () => {
     const onClickHandler = () => {
         todolistsApi.createToDoList(title)
             .then(({data}) => {
-                console.log(data)
                 setState(data.data.item);
             });
     };

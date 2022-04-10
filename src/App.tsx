@@ -1,14 +1,13 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {ToDoList} from "./components/ToDoList/ToDoList";
 import {InputWithButton} from "./components/Input/InputWithButton";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from '@mui/icons-material';
 import {
-    addTodolistAC,
-    changeTodolistFilterAC,
-    changeTodolistTitleAC, FilterValuesType,
-    removeTodolistAC, ToDoListDomainType
+    changeTodolistFilterAC, changeToDoListTitle,
+    createToDoList, deleteToDoList, fetchToDoLists, FilterValuesType,
+    ToDoListDomainType
 } from "./state/todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
@@ -24,20 +23,24 @@ function App() {
     const toDoLists = useSelector<AppRootStateType, Array<ToDoListDomainType>>(state => state.toDoLists);
 
 
+    useEffect(() => {
+        dispatch(fetchToDoLists());
+    }, []);
+
     const changeFilter = useCallback((toDoListID: string, filter: FilterValuesType) => {
         dispatch(changeTodolistFilterAC(toDoListID, filter));
     }, [dispatch]);
 
     const removeToDoList = useCallback((toDoListID: string) => {
-        dispatch(removeTodolistAC(toDoListID));
+        dispatch(deleteToDoList(toDoListID));
     }, [dispatch]);
 
     const updateToDoListTitle = useCallback((toDoListID: string, title: string) => {
-        dispatch(changeTodolistTitleAC(toDoListID, title));
+        dispatch(changeToDoListTitle(toDoListID, title));
     }, [dispatch]);
 
     const addToDoList = useCallback((title: string) => {
-        dispatch(addTodolistAC(title));
+        dispatch(createToDoList(title));
     }, [dispatch]);
 
 

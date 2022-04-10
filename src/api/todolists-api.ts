@@ -59,8 +59,8 @@ type GetTasksResponse = {
 export type UpdateTaskType = {
     title: string,
     description: string,
-    status: number,
-    priority: number,
+    status: TaskStatuses,
+    priority: TaskPriorities,
     startDate: string,
     deadline: string,
 }
@@ -88,6 +88,6 @@ export const todolistsApi = {
         return instance.post<ResponseType<{item: TaskType}>>(`todo-lists/${toDoListID}/tasks`, {title});
     },
     updateTask(toDoListID: string, taskID: string, taskBody: UpdateTaskType) {
-        return instance.put<ResponseType>(`todo-lists/${toDoListID}/tasks${taskID}`, {...taskBody});
+        return instance.put<ResponseType>(`todo-lists/${toDoListID}/tasks/${taskID}`, {...taskBody});
     }
 }

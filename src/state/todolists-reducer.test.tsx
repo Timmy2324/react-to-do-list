@@ -1,13 +1,13 @@
 import React from 'react';
 import {
     addTodolistAC, changeTodolistFilterAC, changeTodolistTitleAC, FilterValuesType,
-    removeTodolistAC, ToDoListDomainType,
+    removeTodolistAC, setToDOListsAC, ToDoListDomainType,
     todolistsReducer
 } from './todolists-reducer';
 import {v1} from 'uuid';
 import {TasksStateType} from '../App';
 import {tasksReducer} from "./tasks-reducer";
-import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
+import {TaskPriorities, TaskStatuses, ToDoListType} from "../api/todolists-api";
 
 let todolistId1: string;
 let todolistId2: string;
@@ -33,12 +33,12 @@ test('correct todolist should be removed', () => {
 
 test('correct todolist should be added', () => {
 
-    let newTodolistTitle = "New Todolist";
+    let newTodolistTitle: ToDoListType = {id: todolistId2, title: "New Todolist", addedDate: '', order: 0};
 
     const endState = todolistsReducer(startState, addTodolistAC(newTodolistTitle))
 
     expect(endState.length).toBe(3);
-    expect(endState[0].title).toBe(newTodolistTitle);
+    expect(endState[0].title).toBe(newTodolistTitle.title);
     expect(endState[0].filter).toBe("all");
     expect(endState[0].id).toBeDefined();
 });
@@ -81,9 +81,9 @@ test('new array should be added when new todolist is added', () => {
         ]
     };
 
-    const action = addTodolistAC("new todolist");
+    const action = addTodolistAC({id: '3', title: "new todolist", addedDate: '', order: 0});
 
-    const endState = tasksReducer(startState, action)
+    const endState = tasksReducer(startState, action);
 
 
     const keys = Object.keys(endState);
@@ -96,19 +96,12 @@ test('new array should be added when new todolist is added', () => {
     expect(endState[newKey]).toEqual([]);
 });
 
-test('ids should be equals', () => {
-    const startTasksState: TasksStateType = {};
-    const startTodolistsState: Array<ToDoListDomainType> = [];
+test('ToDoList should be set to the state', () => {
+    const action = setToDOListsAC(startState);
 
-    const action = addTodolistAC("new todolist");
+    const endState = todolistsReducer([], action)
 
-    const endTasksState = tasksReducer(startTasksState, action)
-    const endTodolistsState = todolistsReducer(startTodolistsState, action)
-
-    const keys = Object.keys(endTasksState);
-    const idFromTasks = keys[0];
-    const idFromTodolists = endTodolistsState[0].id;
-
-    expect(idFromTasks).toBe(action.payload.todolistId);
-    expect(idFromTodolists).toBe(action.payload.todolistId);
-});
+    expect(endState.length).toBe(startState.length);
+    expect(endState[0].title).toBe(startState[0].title);
+    expect(endState[1].title).toBe(startState[1].title);
+})

@@ -1,11 +1,14 @@
-import React, {ChangeEvent, memo, useCallback} from "react";
+import React, {ChangeEvent, memo, useCallback, useEffect} from "react";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
 import {InputWithButton} from "../Input/InputWithButton";
 import {DeleteOutline} from "@mui/icons-material";
 import {Button, ButtonGroup, IconButton} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../state/store";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../../state/tasks-reducer";
+import {
+    createTask, deleteTask,
+    fetchTasks, updateTask,
+} from "../../state/tasks-reducer";
 import {Task} from "../Task/Task";
 import {FilterValuesType} from "../../state/todolists-reducer";
 import {TaskStatuses, TaskType} from "../../api/todolists-api";
@@ -23,10 +26,25 @@ export const ToDoList = memo((props: ToDoListPropsTypes) => {
     const dispatch = useDispatch();
     const tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.toDoListID]);
 
-    const addTask = useCallback((title: string) => dispatch(addTaskAC(props.toDoListID, title)), [dispatch, props.toDoListID]);
-    const removeTask = useCallback((taskID: string) => dispatch(removeTaskAC(props.toDoListID, taskID)), [dispatch, props.toDoListID]);
-    const updateTask = useCallback((taskID: string, title: string) => dispatch(changeTaskTitleAC(props.toDoListID, taskID, title)), [dispatch, props.toDoListID]);
-    const changeStatus = useCallback((taskID: string, e: ChangeEvent<HTMLInputElement>) => dispatch(changeTaskStatusAC(props.toDoListID, taskID, e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New)), [dispatch, props.toDoListID]);
+    useEffect(() => {
+        dispatch(fetchTasks(props.toDoListID));
+    }, []);
+
+    const addTask = useCallback((title: string) => {
+        dispatch(createTask(props.toDoListID, title));
+    }, [dispatch, props.toDoListID]);
+
+    const removeTask = useCallback((taskID: string) => {
+        dispatch(deleteTask(props.toDoListID, taskID));
+    }, [dispatch, props.toDoListID]);
+
+    const updateTaskTitle = useCallback((taskID: string, title: string) => {
+        dispatch(updateTask(props.toDoListID, taskID, {title}))
+    }, [dispatch, props.toDoListID]);
+
+    const changeStatus = useCallback((taskID: string, e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(updateTask(props.toDoListID, taskID, e.currentTarget.checked ? {status: TaskStatuses.Completed} : {status: TaskStatuses.New}))
+    }, [dispatch, props.toDoListID]);
 
 
     const onClickFilterAllTasks = useCallback(() => props.changeFilter(props.toDoListID, 'all'), [props.toDoListID, props.changeFilter]);
@@ -46,7 +64,7 @@ export const ToDoList = memo((props: ToDoListPropsTypes) => {
     }
     const taskList = tasksForTodolist.map((t: TaskType) => {
         return (
-            <Task key={t.id} taskId={t.id} title={t.title} status={t.status} changeStatus={changeStatus} updateTask={updateTask} removeTask={removeTask}/>
+            <Task key={t.id} taskId={t.id} title={t.title} status={t.status} changeStatus={changeStatus} updateTask={updateTaskTitle} removeTask={removeTask}/>
         )
     })
 
