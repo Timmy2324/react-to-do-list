@@ -19,3 +19,9 @@ export const Example = Template.bind({});
 Example.args = {
     callBack: action('button add was pressed'),
 };
+
+export const ExampleDisabled = Template.bind({});
+ExampleDisabled.args = {
+    callBack: action('button add was pressed'),
+    disabled: true,
+};

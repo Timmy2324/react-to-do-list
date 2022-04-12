@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {Grid, Paper} from "@mui/material";
+import {Grid} from "@mui/material";
 import {InputWithButton} from "../Input/InputWithButton";
 import {ToDoList} from "../ToDoList/ToDoList";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,13 +11,20 @@ import {
     ToDoListDomainType
 } from "../ToDoList/reducers/todolists-reducer";
 
-export const ToDoListsList: React.FC = () => {
+type PropsType = {
+    demo?: boolean
+}
+
+export const ToDoListsList: React.FC<PropsType> = ({demo = false}) => {
 
     const dispatch = useDispatch();
     const toDoLists = useSelector<AppRootStateType, Array<ToDoListDomainType>>(state => state.toDoLists);
 
 
     useEffect(() => {
+        if (demo) {
+            return;
+        }
         dispatch(fetchToDoLists());
     }, []);
 
@@ -40,25 +47,21 @@ export const ToDoListsList: React.FC = () => {
 
     return (
         <>
-            <Grid container style={{padding: '20px'}}>
-                <InputWithButton callBack={addToDoList}/>
+            <Grid container style={{paddingTop: '20px'}}>
+                <InputWithButton callBack={addToDoList} placeholder={'Enter ToDoList title'}/>
             </Grid>
-            <Grid container spacing={3}>
+            <Grid container spacing={2}>
                 {toDoLists.map(list => {
-
                     return (
                         <Grid key={list.id} item>
-                            <Paper style={{padding: '10px'}}>
-                                <ToDoList
-                                    key={list.id}
-                                    toDoListID={list.id}
-                                    title={list.title}
-                                    filter={list.filter}
-                                    changeFilter={changeFilter}
-                                    removeToDoList={removeToDoList}
-                                    updateToDoListTitle={updateToDoListTitle}
-                                />
-                            </Paper>
+                            <ToDoList
+                                key={list.id}
+                                toDoList={list}
+                                changeFilter={changeFilter}
+                                removeToDoList={removeToDoList}
+                                updateToDoListTitle={updateToDoListTitle}
+                                demo={demo}
+                            />
                         </Grid>
                     )
                 })}
