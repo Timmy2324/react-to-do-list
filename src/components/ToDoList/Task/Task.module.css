@@ -1,0 +1,10 @@
+.taskWrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.textWrap {
+    display: flex;
+    align-items: center;
+}
