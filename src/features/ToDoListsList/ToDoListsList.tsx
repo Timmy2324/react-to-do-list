@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 import {Grid} from "@mui/material";
-import {InputWithButton} from "../Input/InputWithButton";
-import {ToDoList} from "../ToDoList/ToDoList";
+import {InputWithButton} from "../../components/Input/InputWithButton";
+import {ToDoList} from "../../components/ToDoList/ToDoList";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../app/store";
 import {
@@ -9,7 +9,8 @@ import {
     fetchToDoLists,
     FilterValuesType,
     ToDoListDomainType
-} from "../ToDoList/reducers/todolists-reducer";
+} from "../../components/ToDoList/reducers/todolists-reducer";
+import {Navigate} from "react-router-dom";
 
 type PropsType = {
     demo?: boolean
@@ -19,10 +20,10 @@ export const ToDoListsList: React.FC<PropsType> = ({demo = false}) => {
 
     const dispatch = useDispatch();
     const toDoLists = useSelector<AppRootStateType, Array<ToDoListDomainType>>(state => state.toDoLists);
-
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
 
     useEffect(() => {
-        if (demo) {
+        if (demo || !isLoggedIn) {
             return;
         }
         dispatch(fetchToDoLists());
@@ -44,6 +45,9 @@ export const ToDoListsList: React.FC<PropsType> = ({demo = false}) => {
         dispatch(createToDoList(title));
     }, [dispatch]);
 
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
 
     return (
         <>
