@@ -18,9 +18,11 @@
     "@types/react-redux": "^7.1.22",
     "@types/uuid": "^8.3.3",
     "axios": "^0.26.1",
+    "formik": "^2.2.9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.3",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
@@ -77,6 +79,7 @@
     "jest-image-snapshot": "^4.5.1",
     "jest-puppeteer": "^6.1.0",
     "puppeteer": "^13.4.1",
+    "react-error-overlay": "^6.0.9",
     "start-server-and-test": "^1.14.0"
   }
 }
