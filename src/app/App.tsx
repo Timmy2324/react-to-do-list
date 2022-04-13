@@ -15,7 +15,7 @@ import {ToDoListsList} from "../features/ToDoListsList/ToDoListsList";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {NavLink, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import {Auth} from "../features/Auth/Auth";
 import {initializeApp} from "./reducers/app-reducer";
 import {logOut} from "../features/Auth/reducers/auth-reducer";
@@ -70,8 +70,6 @@ function App({demo = false}: PropsType) {
                 {status === 'loading' && <LinearProgress color={"secondary"}/>}
             </div>
             <Container>
-                <NavLink to={'/'}>rtr2</NavLink>
-                <NavLink to={'/login'}>rtr3</NavLink>
                 <Routes>
                     <Route path={'/'} element={<ToDoListsList demo={demo}/>}/>
                     <Route path={'/login'} element={<Auth/>}/>
