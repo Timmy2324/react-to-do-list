@@ -60,9 +60,7 @@ function App({demo = false}: PropsType) {
                     >
                         <Menu/>
                     </IconButton>
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        News
-                    </Typography>
+                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}></Typography>
                     {isLoggedIn && <Button color="inherit" onClick={logOutHandler}>Log out</Button>}
                 </Toolbar>
             </AppBar>
